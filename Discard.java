@@ -31,4 +31,11 @@ public class Discard
         discard = new ArrayList<Card>();
         Collections.shuffle(Deck.cards);
     }
+    static Card drawCard() {
+        if (discard.size() > 0) {
+            Card cardReturned = discard.remove(0); 
+            return cardReturned;
+        }
+        else return null;
+    }
 }

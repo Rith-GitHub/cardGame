@@ -25,6 +25,12 @@ public class Foundation
         if (SUITS.substring(nextRank,nextRank+1) == "_") return true;
         else return false;
     }
+    public String getSuit() {
+        return suit;
+    }
+    public int getRank() {
+        return nextRank;
+    }
     @Override
     public String toString() {
         if (nextRank > 0) return pile.get(pile.size()-1).toString();
