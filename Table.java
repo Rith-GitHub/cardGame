@@ -2,12 +2,15 @@ import java.util.*;
 
 public class Table
 {
-    public ArrayList<ArrayList<Card>> Table = new ArrayList<ArrayList<Card>>(7);
+    public static ArrayList<ArrayList<Card>> Table = new ArrayList<ArrayList<Card>>(7);
     public Table() {
-        for (int col = 0; col < Table.size(); col++) {
-            for (int e = col; e >= 0; e--) {
-                Table.get(col).add(Deck.drawCard());
+        for (int e = 0; e < 7; e++) {
+            ArrayList<Card> col = new ArrayList<Card>();
+            for (int a = 0; a <= e; a++) {
+                Card newCard = Deck.drawCard();
+                col.add(newCard);
             }
+            Table.add(col);
         }
     }
     
@@ -25,5 +28,8 @@ public class Table
             }
             System.out.println();
         }
+    }
+    public ArrayList<ArrayList<Card>> getTable() {
+        return Table;
     }
 }

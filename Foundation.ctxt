@@ -1,0 +1,11 @@
+#BlueJ class context
+comment0.target=Foundation
+comment1.params=type
+comment1.target=Foundation(java.lang.String)
+comment2.params=card
+comment2.target=Card\ addCard(Card)
+comment3.params=
+comment3.target=boolean\ isComplete()
+comment4.params=
+comment4.target=java.lang.String\ toString()
+numComments=5

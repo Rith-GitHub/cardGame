@@ -2,20 +2,21 @@ import java.util.*;
 
 public class Deck
 {
-    static ArrayList<Card> cards = new ArrayList<Card>();
-    public void Deck()
+    public static ArrayList<Card> cards = new ArrayList<Card>();
+    public Deck()
     {
         for (int i=0; i < 52; i++) {
             String suit = "";
             String rank = "";
-            if (i % 4 == 0) {suit = "Heart  ";}
-            else if (i % 4 == 1) {suit = "Diamond";}
-            else if (i % 4 == 2) {suit = "Spade  ";}
-            else if (i % 4 == 3) {suit = "Clover ";}
+            if (i / 13 == 0) {suit = "Heart";}
+            else if (i / 13 == 1) {suit = "Diamond";}
+            else if (i / 13 == 2) {suit = "Spade";}
+            else if (i / 13 == 3) {suit = "Clubs";}
             if (i % 13 == 0) {rank = "A";}
             else if (i % 13 <= 9) {
-                Integer d = new Integer(i+1);
-                rank = d.toString();}
+                Integer d = new Integer(i % 13 + 1);
+                rank = d.toString();
+            }
             else if (i % 13 == 10) {rank = "J";}
             else if (i % 13 == 11) {rank = "Q";}
             else if (i % 13 == 12) {rank = "K";}
@@ -25,7 +26,10 @@ public class Deck
         }
     }
     static Card drawCard() {
-        Card cardReturned = cards.remove(0);
-        return cardReturned;
+        if (cards.size() > 0) {
+            Card cardReturned = cards.remove(0); 
+            return cardReturned;
+        }
+        else return null;
     }
 }
