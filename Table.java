@@ -3,33 +3,48 @@ import java.util.*;
 public class Table
 {
     public static ArrayList<ArrayList<Card>> Table = new ArrayList<ArrayList<Card>>(7);
-    public Table() {
+    public Table(Deck deck) {
         for (int e = 0; e < 7; e++) {
             ArrayList<Card> col = new ArrayList<Card>();
             for (int a = 0; a <= e; a++) {
-                Card newCard = Deck.drawCard();
+                Card newCard = deck.drawCard();
+                newCard.setLocation("table");
                 col.add(newCard);
             }
             Table.add(col);
         }
     }
-    
-    public void printTable() {
-        ArrayList<Card> longestCol = Table.get(0);
-        for (int col = 0; col < Table.size(); col++) {
-            if (Table.get(col).size() > longestCol.size()) {
-                longestCol = Table.get(col);
+
+    public int indexOfLongest() {
+        int index = 0;
+        int elementLength = this.Table.get(0).size();
+        for (ArrayList<Card> col : this.Table) {
+            if (col.size() > elementLength) {
+                index = this.Table.indexOf(col);
+                elementLength = col.size();
             }
         }
-        int longestLen = longestCol.size();
-        for (int row = 0; row < longestLen; row++) {
-            for (int col = 0; col < 7; col++) {
-                System.out.print(Table.get(col).get(row).toString() + " ");
+        return index;
+    }
+    public int size() {
+        int colIndex = this.indexOfLongest();
+        return this.Table.get(colIndex).size();
+    }
+    public int cardSize() {
+        int size = 0;
+        for(ArrayList<Card> col : this.table) {
+            for(Card card : row) {
+                size++;
             }
-            System.out.println();
         }
+        return size;
     }
     public ArrayList<ArrayList<Card>> getTable() {
         return Table;
+    }
+    public cardAt(int x, int y) {
+        ArrayList<Card> col = this.Table.get(y);
+        Card card = col.get(x);
+        return card;
     }
 }

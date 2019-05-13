@@ -1,9 +1,11 @@
 #BlueJ class context
 comment0.target=Table
-comment1.params=
-comment1.target=Table()
+comment1.params=deck
+comment1.target=Table(Deck)
 comment2.params=
-comment2.target=void\ printTable()
+comment2.target=int\ indexOfLongest()
 comment3.params=
-comment3.target=java.util.ArrayList\ getTable()
-numComments=4
+comment3.target=int\ size()
+comment4.params=
+comment4.target=java.util.ArrayList\ getTable()
+numComments=5

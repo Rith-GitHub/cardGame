@@ -5,16 +5,19 @@ public class Card
     private String rank;
     private String suit;
     private boolean faceUp;
-    public Card(String r, String s)
+    private String location;
+    public Card(String r, String s, String l)
     {
        this.rank = r;
        this.suit = s;
+       this.location = l;
     }
-    public Card(String r, String s, boolean b)
+    public Card(String r, String s, String l, boolean b)
     {
        this.rank = r;
        this.suit = s;
        this.faceUp = b;
+       this.location = l;
     }
     @Override
     public String toString() {
@@ -31,6 +34,8 @@ public class Card
     }
     public String getSuit() {return this.suit;}
     public String getRank() {return this.rank;}
+    public String getLocation() {return this.location;}
+    public void setLocation(String l) {this.location = l;}
     public void flip() {this.faceUp = !faceUp;}
     public void flip(boolean b) {this.faceUp = b;}
     public boolean getFace() {return this.faceUp;}

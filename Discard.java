@@ -1,14 +1,15 @@
 import java.util.*;
 public class Discard
 {
-    public static ArrayList<Card> discard = new ArrayList<Card>();
+    private List<Card> discard;
     public Discard()
     {
-        
+        discard = new ArrayList<Card>();
     }
-    static void addCard(Card card) {
+    public void addCard(Card card) {
         if (card != null) {
             card.flip(true);
+            card.setLocation("discard");
             discard.add(0, card);
         }
     }
@@ -22,18 +23,18 @@ public class Discard
         }
         else return "";
     }
-    static void returnCards() {
+    public void returnCards(Deck deck) {
         for (int i = 0; i < discard.size(); i++) {
             Card card = discard.get(i);
             card.flip(false);
-            Deck.cards.add(card);
+            deck.addCard(card);
         }
         discard = new ArrayList<Card>();
-        Collections.shuffle(Deck.cards);
+        deck.shuffle();
     }
-    static Card drawCard() {
+    public Card drawCard() {
         if (discard.size() > 0) {
-            Card cardReturned = discard.remove(0); 
+            Card cardReturned = discard.remove(0);
             return cardReturned;
         }
         else return null;
