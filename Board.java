@@ -30,7 +30,7 @@ public class Board
         return this.table.cardSize();
     }
     public Card cardAt(int x, int y) {
-        return this.table.carAt(x, y)
+        return this.table.cardAt(x, y);
     }
 }
     /*public void run() {

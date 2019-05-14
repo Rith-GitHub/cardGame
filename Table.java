@@ -2,49 +2,47 @@ import java.util.*;
 
 public class Table
 {
-    public static ArrayList<ArrayList<Card>> Table = new ArrayList<ArrayList<Card>>(7);
+    private Card[][] Table = new Card[7][20];
     public Table(Deck deck) {
-        for (int e = 0; e < 7; e++) {
-            ArrayList<Card> col = new ArrayList<Card>();
-            for (int a = 0; a <= e; a++) {
+        for (int col = 0; col < 7; col++) {
+            for (int row = 0; row <= col; row++) {
                 Card newCard = deck.drawCard();
                 newCard.setLocation("table");
-                col.add(newCard);
+                Table[col][row] = newCard;
             }
-            Table.add(col);
         }
     }
 
-    public int indexOfLongest() {
+    public int size() {
         int index = 0;
-        int elementLength = this.Table.get(0).size();
-        for (ArrayList<Card> col : this.Table) {
-            if (col.size() > elementLength) {
-                index = this.Table.indexOf(col);
-                elementLength = col.size();
+        int elementLength = this.Table[0].length;
+        for (int i = 0; i < this.Table.length; i++) {
+            int count = 0;
+            for (Object o : Table[i]) {
+                if (o != null) count++;
+            }
+            if (count > elementLength) {
+                index = i;
+                elementLength = count;
             }
         }
-        return index;
-    }
-    public int size() {
-        int colIndex = this.indexOfLongest();
-        return this.Table.get(colIndex).size();
+        return elementLength;
     }
     public int cardSize() {
         int size = 0;
-        for(ArrayList<Card> col : this.table) {
-            for(Card card : row) {
-                size++;
+        for(Card[] col : this.Table) {
+            for(Card card : col) {
+                if(card != null) size++;
             }
         }
         return size;
     }
-    public ArrayList<ArrayList<Card>> getTable() {
+    public Card[][] getTable() {
         return Table;
     }
-    public cardAt(int x, int y) {
-        ArrayList<Card> col = this.Table.get(y);
-        Card card = col.get(x);
+    public Card cardAt(int x, int y) {
+        Card[] col = this.Table[y];
+        Card card = col[x];
         return card;
     }
 }

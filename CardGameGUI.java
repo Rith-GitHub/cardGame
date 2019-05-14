@@ -68,7 +68,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	/** The "you've won n out of m games" message. */
 	private JLabel totalsMsg;
 	/** The card displays. */
-	private Jlabel[][] displayCards;
+	private JLabel[][] displayCards;
 	/** The win message. */
 	private JLabel winMsg;
 	/** The loss message. */
@@ -77,7 +77,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	private Point[][] cardCoords;
 
 	/** kth element is true iff the user has selected card #k. */
-	private boolean[] selections;
+	private boolean[][] selections;
 	/** The number of games won. */
 	private int totalWins;
 	/** The number of games played. */
@@ -93,26 +93,23 @@ public class CardGameGUI extends JFrame implements ActionListener {
 		totalWins = 0;
 		totalGames = 0;
 
-        initCoords();
-		initDisplay();
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		repaint();
-	}
-    public void initCoords() {
-        // Initialize cardCoords using 5 cards per row
-		cardCoords = new Point[7][board.size()];
+        // Initialize cardCoords using 7 cards per row
+		cardCoords = new Point[7][20];
 		int x = LAYOUT_LEFT;
 		int y = LAYOUT_TOP;
-		for (int i = 0; i < 7; i++) {
-            for (int e = 0; e < board.size(); e++){
-    			cardCoords[i][e] = new Point(x, y);
+		for (int col = 0; col < 7; col++) {
+            for (int row = 0; row < 20; row++){
+    			cardCoords[col][row] = new Point(x, y);
     			x += LAYOUT_WIDTH_INC;
             }
             x = LAYOUT_LEFT;
             y += LAYOUT_HEIGHT_INC;
 		}
-		selections = new boolean[7][board.size()]
-    }
+		selections = new boolean[7][20];
+		initDisplay();
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		repaint();
+	}
 
 	/**
 	 * Run the game.
@@ -129,25 +126,26 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	 * Draw the display (cards and messages).
 	 */
 	public void repaint() {
-		for (int x = 0; k < 7; x++) {
-            for (int y = 0; y < board.size(); y++)
+		for (int col = 0; col < 7; col++) {
+            for (int row = 0; row < 20; row++) {
     			String cardImageFileName =
-    				imageFileName(board.cardAt(x,y), selections[x][y]);
+    				imageFileName(board.cardAt(row, col), selections[col][row]);
     			URL imageURL = getClass().getResource(cardImageFileName);
     			if (imageURL != null) {
     				ImageIcon icon = new ImageIcon(imageURL);
-    				displayCards[x][y].setIcon(icon);
-    				displayCards[x][y].setVisible(true);
+    				displayCards[col][row].setIcon(icon);
+    				displayCards[col][row].setVisible(true);
     			} else {
-    				displayCards[x][y].setVisible(false);
+    				displayCards[col][row].setVisible(false);
     			}
+            }
 		}
-		statusMsg.setText(board.deckSize()
+		/*statusMsg.setText(board.deckSize()
 			+ " undealt cards remain.");
 		statusMsg.setVisible(true);
 		totalsMsg.setText("You've won " + totalWins
 			 + " out of " + totalGames + " games.");
-		totalsMsg.setVisible(true);
+		totalsMsg.setVisible(true);*/
 		pack();
 		panel.repaint();
 	}
@@ -164,7 +162,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 
 		setTitle("solitaire");
 
-		// Calculate number of rows of cards (5 cards per row)
+		// Calculate number of rows of cards (7 cards per row)
 		// and adjust JFrame height if necessary
 		int numCardRows = board.size();
 		int height = DEFAULT_HEIGHT;
@@ -176,16 +174,19 @@ public class CardGameGUI extends JFrame implements ActionListener {
 		panel.setLayout(null);
 		panel.setPreferredSize(
 			new Dimension(DEFAULT_WIDTH - 20, height - 20));
-		displayCards = new JLabel[7][board.size()];
-		for (int k = 0; k < board.cardSize(); k++) {
-			displayCards[k] = new JLabel();
-			panel.add(displayCards[k]);
-			displayCards[k].setBounds(cardCoords[k].x, cardCoords[k].y,
-										CARD_WIDTH, CARD_HEIGHT);
-			displayCards[k].addMouseListener(new MyMouseListener());
-			selections[k] = false;
+        displayCards = new JLabel[7][20];
+		for (int col = 0; col < 7; col++) {
+            for (int row = 0; row < 20; row++) {
+    			displayCards[col][row] = new JLabel();
+    			panel.add(displayCards[col][row]);
+    			displayCards[col][row].setBounds(cardCoords[col][row].x,
+                                            cardCoords[col][row].y, CARD_WIDTH,
+                                            CARD_HEIGHT);
+    			displayCards[col][row].addMouseListener(new MyMouseListener());
+    			selections[col][row] = false;
+            }
 		}
-		replaceButton = new JButton();
+		/*replaceButton = new JButton();
 		replaceButton.setText("Replace");
 		panel.add(replaceButton);
 		replaceButton.setBounds(BUTTON_LEFT, BUTTON_TOP, 100, 30);
@@ -227,7 +228,7 @@ public class CardGameGUI extends JFrame implements ActionListener {
 
 		if (!board.anotherPlayIsPossible()) {
 			signalLoss();
-		}
+		}*/
 
 		pack();
 		getContentPane().add(panel);
@@ -255,7 +256,10 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	 */
 	private String imageFileName(Card c, boolean isSelected) {
 		String str = "cards/";
-		if (!c.getFace()) {
+        if (c == null) {
+            return "";
+        }
+        if (!c.getFace()) {
 			return "cards/back1.GIF";
 		}
 		str += c.getRank() + c.getSuit();
@@ -274,11 +278,15 @@ public class CardGameGUI extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(replaceButton)) {
 			// Gather all the selected cards.
-			List<Integer> selection = new ArrayList<Integer>();
-			for (int k = 0; k < board.size(); k++) {
-				if (selections[k]) {
-					selection.add(new Integer(k));
-				}
+			List<Integer[]> selection = new ArrayList<Integer[]>();
+			for (int col = 0; col < 7; col++) {
+                for (int row = 0; row < 20; row++) {
+    				if (selections[col][row]) {
+                        Integer[] entry = new Integer[2];
+                        entry[0] = col; entry[1] = row;
+    					selection.add(entry);
+    				}
+                }
 			}
 			// Make sure that the selected cards represent a legal replacement.
 			if (!board.isLegal(selection)) {
